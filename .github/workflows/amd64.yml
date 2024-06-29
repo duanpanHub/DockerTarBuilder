@@ -1,33 +1,33 @@
 name: x86-64 Pull and Save Docker Image
-
 on:
   workflow_dispatch:
     inputs:
       docker_images:
-        description: 'jitsi视频会议'
+        description: '请填写docker镜像名称 多个用英文逗号分开'
         required: true
-        default: 'jitsi'  # 设置默认的 Docker 镜像列表
+        default: 'jitsi/web:stable-9457,jitsi/prosody:stable-9457,jitsi/jicofo:stable-9457,jitsi/jvb:stable-9457'  # 设置默认的 Docker 镜像列表
 
 jobs:
   pull_and_package:
-    runs-on: jitsi
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Clean up Docker to free space
+      run: |
+          docker system prune -a -f
+          docker volume prune -f
+
     - name: Pull Docker Images and Package
       run: |
-          docker pull "jitsi/web:stable-9457" --platform "linux/amd64"
-          docker pull "jitsi/prosody:stable-9457" --platform "linux/amd64"
-          docker pull "jitsi/jicofo:stable-9457" --platform "linux/amd64"
-          docker pull "jitsi/jvb:stable-9457" --platform "linux/amd64"
-          
-          docker save "jitsi/web:stable-9457" \
-          docker save "jitsi/prosody:stable-9457" \
-          docker save "jitsi/jicofo:stable-9457" \
-          docker save "jitsi/jvb:stable-9457" \
-          -o "jitsi-docker-images-amd64.tar"
+        images="${{ github.event.inputs.docker_images }}"
+        IFS=',' read -r -a image_array <<< "$images"
+        for image in "${image_array[@]}"; do
+          docker pull "${image}" --platform "linux/amd64"
+          docker save "${image}" -o "${image//\//_}-amd64.tar"
+        done
 
     - name: Compress the TAR files
       run: tar -czf x86-64-images.tar.gz *-amd64.tar
