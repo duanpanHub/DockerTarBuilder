@@ -6,11 +6,11 @@ on:
       docker_images:
         description: 'jitsi视频会议'
         required: true
-        default: 'jitsi'  # 设置默认的 Docker 镜像列表
+        default: 'jitsi/web:stable-9457'  # 设置默认的 Docker 镜像列表
 
 jobs:
   pull_and_package:
-    runs-on: jitsi
+    runs-on: jitsi/web:stable-9457
 
     steps:
     - name: Checkout repository
