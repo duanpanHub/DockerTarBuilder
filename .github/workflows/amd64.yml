@@ -6,11 +6,11 @@ on:
       docker_images:
         description: 'jitsi视频会议'
         required: true
-        default: 'alpine:latest,ubuntu:latest'  # 设置默认的 Docker 镜像列表
+        default: ''  # 设置默认的 Docker 镜像列表
 
 jobs:
   pull_and_package:
-    runs-on: jitsi/web:stable-9457-2
+    runs-on: jitsi
 
     steps:
     - name: Checkout repository
@@ -18,12 +18,16 @@ jobs:
 
     - name: Pull Docker Images and Package
       run: |
-        images="${{ github.event.inputs.docker_images }}"
-        IFS=',' read -r -a image_array <<< "$images"
-        for image in "${image_array[@]}"; do
-          docker pull "${image}" --platform "linux/amd64"
-          docker save "${image}" -o "${image//\//_}-amd64.tar"
-        done
+          docker pull "jitsi/web:stable-9457-2" --platform "linux/amd64"
+          docker pull "jitsi/prosody:stable-9457-2" --platform "linux/amd64"
+          docker pull "jitsi/jicofo:stable-9457-2" --platform "linux/amd64"
+          docker pull "jitsi/jvb:stable-9457-2" --platform "linux/amd64"
+          
+          docker save "jitsi/web:stable-9457-2" \
+          docker save "jitsi/prosody:stable-9457-2" \
+          docker save "jitsi/jicofo:stable-9457-2" \
+          docker save "jitsi/jvb:stable-9457-2" \
+          -o "jitsi-docker-images-amd64.tar"
 
     - name: Compress the TAR files
       run: tar -czf x86-64-images.tar.gz *-amd64.tar
