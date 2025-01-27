@@ -29,6 +29,7 @@ jobs:
           docker save "${image}" -o "${image//\//_}-amd64.tar"
           docker login registry.macrothinking.cn -u admin -p admin@Harbor2023
           docker tag "${image}" "registry.macrothinking.cn/library/${image}"
+          export DOCKER_OPTS="--insecure-registry registry.macrothinking.cn"
           docker push "registry.macrothinking.cn/library/${image}"
         done
 
