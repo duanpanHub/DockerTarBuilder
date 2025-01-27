@@ -25,7 +25,7 @@ jobs:
         images="${{ github.event.inputs.docker_images }}"
         IFS=',' read -r -a image_array <<< "$images"
         export DOCKER_CONTENT_TRUST=0
-        export DOCKER_OPTS="--insecure-registry registry.macrothinking.cn"
+        export DOCKER_OPTS="--insecure-registry registry.macrothinking.cn:80"
         for image in "${image_array[@]}"; do
           docker pull "${image}" --platform "linux/amd64"
           docker save "${image}" -o "${image//\//_}-amd64.tar"
