@@ -15,9 +15,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       
-    - name: install dependencies
+    - name: check dependencies
       run: |
-        apt-get install unzip zip
+        zip --version
+        echo "========== check success ! =============="
         
     - name: Clean up Docker to free space
       run: |
