@@ -43,7 +43,7 @@ jobs:
           echo "======= 正在推送镜像到 aliyun仓库 ========"
           docker login --username=macrothinking registry.cn-hangzhou.aliyuncs.com -p duanpan19901112
           docker tag "${image}" "registry.cn-hangzhou.aliyuncs.com/micro_base/${images_repo}"
-          "${image} ---> registry.cn-hangzhou.aliyuncs.com/micro_base/${images_repo}" >> images-summary.txt
+          echo "${image} ---> registry.cn-hangzhou.aliyuncs.com/micro_base/${images_repo}" >> images-summary.txt
           docker push registry.cn-hangzhou.aliyuncs.com/micro_base/${images_repo}
         done
 
