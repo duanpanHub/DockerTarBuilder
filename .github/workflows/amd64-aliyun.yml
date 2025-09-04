@@ -70,3 +70,4 @@ jobs:
     - name: Clean up intermediate files
       run: |
         rm -rf *-images.tar.gz
+        rm -rf images-summary.txt
