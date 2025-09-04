@@ -38,7 +38,7 @@ jobs:
           docker pull "${image}"
           images_repo="${image//\//.}"
           images_file="${images_repo//:/_}-images.tar"
-          docker save "${image}" -o "$artifactDir/$images_file"
+          docker save "${image}" -o "$images_file"
           echo "======= 正在推送镜像到 aliyun仓库 ========"
           docker login --username=macrothinking registry.cn-hangzhou.aliyuncs.com -p duanpan19901112
           docker tag "${image}" "registry.cn-hangzhou.aliyuncs.com/micro_base/${images_repo}"
