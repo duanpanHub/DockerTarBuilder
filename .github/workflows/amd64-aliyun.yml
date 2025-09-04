@@ -37,6 +37,7 @@ jobs:
           images_repo="${image//\//.}"
           images_file="${images_repo}-images.tar"
           docker save "${image}" -o "$images_file"
+          echo "======= 正在推送镜像到 aliyun仓库 ========"
           docker login --username=macrothinking registry.cn-hangzhou.aliyuncs.com -p duanpan19901112
           docker tag "${image}" "registry.cn-hangzhou.aliyuncs.com/micro_base/${images_repo}"
           docker push registry.cn-hangzhou.aliyuncs.com/micro_base/${images_repo}
@@ -51,7 +52,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: All Images zip Artifact
-        path: "**/*-images.tar.gz"
+        path: *-images.tar.gz
         retention-days: 3  # 将保留天数设置为 3 天 最多可设置90天
 
     - name: Clean up intermediate files
