@@ -29,6 +29,7 @@ jobs:
       run: |
         # artifactDir=${{ github.workspace }}/artifact
         # mkdir -p $artifactDir
+        echo "Generated On `date`" > images-summary.txt
         images="${{ github.event.inputs.docker_images }}"
         IFS=',' read -r -a image_array <<< "$images"
         for image in "${image_array[@]}"; do
@@ -42,6 +43,7 @@ jobs:
           echo "======= 正在推送镜像到 aliyun仓库 ========"
           docker login --username=macrothinking registry.cn-hangzhou.aliyuncs.com -p duanpan19901112
           docker tag "${image}" "registry.cn-hangzhou.aliyuncs.com/micro_base/${images_repo}"
+          "${image} ---> registry.cn-hangzhou.aliyuncs.com/micro_base/${images_repo}" >> images-summary.txt
           docker push registry.cn-hangzhou.aliyuncs.com/micro_base/${images_repo}
         done
 
@@ -57,7 +59,14 @@ jobs:
         name: all-images
         path: ./*-images.tar.gz # ${{ github.workspace }}/artifact/**/*
         retention-days: 3  # 将保留天数设置为 3 天 最多可设置90天
-
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: images-summary-txt
+        path: images-summary.txt
+        retention-days: 3  # 将保留天数设置为 3 天 最多可设置90天
+        
     - name: Clean up intermediate files
       run: |
         rm -rf *-images.tar.gz
