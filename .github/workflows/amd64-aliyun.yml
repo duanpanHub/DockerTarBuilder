@@ -29,7 +29,7 @@ jobs:
       run: |
         # artifactDir=${{ github.workspace }}/artifact
         # mkdir -p $artifactDir
-        echo "Generated On `date`" > images-summary.txt
+        echo "Generated On: `date`\n" > images-summary.txt
         images="${{ github.event.inputs.docker_images }}"
         IFS=',' read -r -a image_array <<< "$images"
         for image in "${image_array[@]}"; do
@@ -56,16 +56,16 @@ jobs:
     - name: Upload Images Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: all-images
+        name: all-images-tar-file
         path: ./*-images.tar.gz # ${{ github.workspace }}/artifact/**/*
         retention-days: 3  # 将保留天数设置为 3 天 最多可设置90天
         
     - name: Upload Summary Txt
       uses: actions/upload-artifact@v4
       with:
-        name: images-summary-txt
+        name: images-summary-txt-file
         path: images-summary.txt
-        retention-days: 3  # 将保留天数设置为 3 天 最多可设置90天
+        retention-days: 1  # 将保留天数设置为 3 天 最多可设置90天
         
     - name: Clean up intermediate files
       run: |
