@@ -28,7 +28,7 @@ jobs:
           docker pull "${image}" --platform "linux/amd64"
           docker save "${image}" -o "${image//\//_}-amd64.tar"
           # docker login registry.macrothinking.cn -u admin -p admin@Harbor2023
-          docker tag "${image}" "registry.macrothinking.cn/library/${image}"
+          # docker tag "${image}" "registry.macrothinking.cn/library/${image}"
           # docker push --disable-content-trust --insecure-registry registry.macrothinking.cn "registry.macrothinking.cn/library/${image}" 
         done
 
