@@ -54,7 +54,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: All Artifact File
+        name: all-images
         path: ./*-images.tar.gz # ${{ github.workspace }}/artifact/**/*
         retention-days: 3  # 将保留天数设置为 3 天 最多可设置90天
 
